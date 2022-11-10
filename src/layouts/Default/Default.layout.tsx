@@ -1,7 +1,7 @@
+import "./Default.css";
+
 import React from "react";
 import { Outlet } from "react-router-dom";
-
-import "./Default.css";
 
 const DefaultLayout: React.FC = (): JSX.Element => {
   return (
