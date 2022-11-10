@@ -1,3 +1,5 @@
+import "./global.css";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -12,9 +14,6 @@ import Home from "./pages/Home/Home";
 import NotFound from "./pages/NotFound/NotFound";
 import Register from "./pages/Account/Register/Register";
 import Login from "./pages/Account/Login/Login";
-
-import "./reset.css";
-import "./global.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as Element);
 
