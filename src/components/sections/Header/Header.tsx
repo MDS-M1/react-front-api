@@ -11,8 +11,6 @@ const Header: React.FC = () =>
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { user, logout } = useAuthStore();
 
-    console.log({ ...user });
-
     return (
       <header>
         <h1>PostManager</h1>

@@ -1,7 +1,6 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
-import authHeader from "../utils/authHeader";
 import { API_URL, HEADERS } from "../utils/global";
 
 export type RegisterInput = {
@@ -86,7 +85,7 @@ export const createAuthStore = (): AuthStoreType => {
     logout() {
       return axios
         .delete(`${API_URL}/sessions`, {
-          headers: { ...this.getAuthHeader(), ...authHeader() },
+          headers: { ...this.getAuthHeader(), ...HEADERS },
         })
         .then(() => {
           localStorage.removeItem("access_token");
