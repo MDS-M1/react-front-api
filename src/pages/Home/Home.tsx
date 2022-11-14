@@ -1,24 +1,10 @@
-import React from "react";
 import "./Home.css";
 
+import React from "react";
+import { withRouter } from "../../utils/withRouter";
+
 function Home() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <p>Home</p>;
 }
 
-export default Home;
+export default withRouter(Home);

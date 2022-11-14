@@ -1,0 +1,53 @@
+@import "reset.css";
+
+body {
+  font-size: 16px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #F8F8F8;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+a {
+  width: 100%;
+  color: #011627;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+strong {
+  font-weight: bold;
+}
+
+// Global class
+
+.btn {
+  display: block;
+  padding: 16px 24px;
+  width: fit-content;
+  transition: all 150ms ease-in-out;
+  &--primary {
+    border: 1px solid #FF3366;
+    background-color: #FF3366;
+    color: white;
+  }
+  &:hover {
+    cursor: pointer;
+    background-color: white;
+    color: #FF3366;
+  }
+}
