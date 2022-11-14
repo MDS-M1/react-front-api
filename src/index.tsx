@@ -4,6 +4,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Navigate, useRoutes } from "react-router-dom";
 
+import { AuthProvider } from "./providers/Auth.provider";
+
 import Header from "./components/sections/Header/Header";
 import Footer from "./components/sections/Footer/Footer";
 
@@ -36,10 +38,12 @@ const App: React.FC = (): JSX.Element => {
 
 root.render(
   <React.StrictMode>
-    <Router>
-      <Header />
-      <App />
-      <Footer />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Header />
+        <App />
+        <Footer />
+      </Router>
+    </AuthProvider>
   </React.StrictMode>
 );
