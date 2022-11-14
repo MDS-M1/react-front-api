@@ -1,8 +1,7 @@
-import "./global.css";
+import "./global.scss";
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-
 import { BrowserRouter as Router, Navigate, useRoutes } from "react-router-dom";
 
 import Header from "./components/sections/Header/Header";

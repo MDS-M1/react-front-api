@@ -44,6 +44,8 @@
     ]
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.9"
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/node-sass": "^4.11.3",
+    "node-sass": "^7.0.3"
   }
 }
