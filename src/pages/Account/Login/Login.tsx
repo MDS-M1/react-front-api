@@ -3,11 +3,12 @@ import "./Login.scss";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { login, LoginInput } from "../../../services/Auth.service";
 import { withRouter } from "../../../utils/withRouter";
+import { useAuthStore } from "../../../providers/Auth.provider";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuthStore();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -18,7 +19,7 @@ const Login = () => {
       password: formData.get("password"),
     };
 
-    login(registerPayload as LoginInput).then(() => navigate("/"));
+    login(registerPayload).then(() => navigate("/"));
   };
 
   return (

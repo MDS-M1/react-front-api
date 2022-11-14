@@ -2,13 +2,17 @@ import "./Header.scss";
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { getCurrentUser, logout } from "../../../services/Auth.service";
+import { useObserver } from "mobx-react";
 
-const Header: React.FC = () => {
-  const userData = localStorage.getItem("access_token");
+import { useAuthStore } from "../../../providers/Auth.provider";
 
-  if (userData) {
-    const user = getCurrentUser();
+const Header: React.FC = () =>
+  useObserver(() => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { user, logout } = useAuthStore();
+
+    console.log({ ...user });
+
     return (
       <header>
         <h1>PostManager</h1>
@@ -43,27 +47,5 @@ const Header: React.FC = () => {
         </div>
       </header>
     );
-  } else {
-    return (
-      <header>
-        <h1>PostManager</h1>
-        <div className="header--nav">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/register">Register</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-    );
-  }
-};
+  });
 export default Header;
