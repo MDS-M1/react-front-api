@@ -1,11 +1,13 @@
-import React from "react";
+import "./Footer.scss";
 
-import "./Footer.css";
+import React from "react";
 
 const Footer: React.FC = (): JSX.Element => {
   return (
     <footer>
-      <p>Footer</p>
+      <p>
+        Created by <strong>Rémi RUBIS</strong>
+      </p>
     </footer>
   );
 };
