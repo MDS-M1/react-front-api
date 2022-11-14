@@ -3,11 +3,12 @@ import "./Register.css";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { register, RegisterInput } from "../../../services/Auth.service";
+import { useAuthStore } from "../../../providers/Auth.provider";
 import { withRouter } from "../../../utils/withRouter";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { register } = useAuthStore();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ const Register = () => {
       passwordConfirmation: formData.get("repeat-password"),
     };
 
-    register(registerPayload as RegisterInput).then(() => navigate("/"));
+    register(registerPayload).then(() => navigate("/"));
   };
 
   return (
