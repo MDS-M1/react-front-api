@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Navigate, useRoutes } from "react-router-dom";
 
-import { AuthProvider } from "./providers/Auth.provider";
+import { AuthProvider, ProtectedRoute } from "./providers/Auth.provider";
 
 import Header from "./components/sections/Header/Header";
 import Footer from "./components/sections/Footer/Footer";
@@ -25,6 +25,14 @@ const App: React.FC = (): JSX.Element => {
     children: [
       { path: "*", element: <Navigate to="/404" replace /> },
       { path: "/", element: <Home /> },
+      {
+        path: "/posts",
+        element: (
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        ),
+      },
       { path: "/register", element: <Register /> },
       { path: "/login", element: <Login /> },
       { path: "404", element: <NotFound /> },

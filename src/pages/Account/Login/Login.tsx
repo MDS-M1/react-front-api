@@ -1,13 +1,14 @@
 import "./Login.scss";
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { withRouter } from "../../../utils/withRouter";
 import { useAuthStore } from "../../../providers/Auth.provider";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuthStore();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -19,7 +20,11 @@ const Login = () => {
       password: formData.get("password"),
     };
 
-    login(registerPayload).then(() => navigate("/"));
+    login(registerPayload).then(() => {
+      const searchParams = new URLSearchParams(location.search);
+      const haveRedirect = searchParams.get("redirect");
+      navigate(haveRedirect || "/");
+    });
   };
 
   return (
