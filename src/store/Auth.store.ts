@@ -38,7 +38,7 @@ type AuthStoreType = {
   user: UserDocument | null;
   login: (payload: LoginInput) => Promise<any>;
   register: (payload: RegisterInput) => Promise<any>;
-  logout: () => Promise<any>;
+  logout: () => void;
   getAuthHeader: () => object;
   getUserData: () => void;
 };
@@ -83,16 +83,24 @@ export const createAuthStore = (): AuthStoreType => {
         });
     },
     logout() {
-      return axios
-        .delete(`${API_URL}/sessions`, {
-          headers: { ...this.getAuthHeader(), ...HEADERS },
-        })
-        .then(() => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
+      try {
+        axios
+          .delete(`${API_URL}/sessions`, {
+            headers: { ...this.getAuthHeader(), ...HEADERS },
+          })
+          .then(() => {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("refresh_token");
 
-          this.user = null;
-        });
+            this.user = null;
+          });
+      } catch (e) {
+        console.error(e);
+      }
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+
+      this.user = null;
     },
     getUserData() {
       const accessToken = localStorage.getItem("access_token")!;
