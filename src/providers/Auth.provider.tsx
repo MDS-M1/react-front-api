@@ -37,12 +37,14 @@ export const ProtectedRoute = ({
     return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
   }
 
-  const hasPermission = Array.isArray(requestedRole)
-    ? Object.values(requestedRole).some((v) => v === user.role)
-    : user.role === requestedRole;
+  if (requestedRole) {
+    const hasPermission = Array.isArray(requestedRole)
+      ? Object.values(requestedRole).some((v) => v === user.role)
+      : user.role === requestedRole;
 
-  if (!hasPermission) {
-    return <Navigate to="/" replace />;
+    if (!hasPermission) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return children;
