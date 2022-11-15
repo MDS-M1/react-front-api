@@ -82,18 +82,11 @@ export const createAuthStore = (): AuthStoreType => {
           return res.data;
         });
     },
-    logout() {
+    async logout() {
       try {
-        axios
-          .delete(`${API_URL}/sessions`, {
-            headers: { ...this.getAuthHeader(), ...HEADERS },
-          })
-          .then(() => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-
-            this.user = null;
-          });
+        axios.delete(`${API_URL}/sessions`, {
+          headers: { ...this.getAuthHeader(), ...HEADERS },
+        });
       } catch (e) {
         console.error(e);
       }
