@@ -4,13 +4,17 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react";
 
-import { useAuthStore } from "../../../providers/Auth.provider";
+import { useStores } from "../../../hooks/useStores";
 
 const Header: React.FC = observer(() => {
-  const { user, logout } = useAuthStore();
+  const { authStore } = useStores();
+  const { user, logout } = authStore;
   const navigate = useNavigate();
 
-  console.log(user);
+  const disconnectUser = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <header>
@@ -39,15 +43,14 @@ const Header: React.FC = observer(() => {
               </li>
             )}
             {user && (
-              <li
-                className="logout"
-                onClick={() => {
-                  logout();
-                  navigate("/");
-                }}
-              >
-                Logout
-              </li>
+              <>
+                <li>
+                  <Link to="/posts">Posts</Link>
+                </li>
+                <li className="logout" onClick={disconnectUser}>
+                  Logout
+                </li>
+              </>
             )}
           </ul>
         </nav>
