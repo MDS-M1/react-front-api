@@ -10,6 +10,10 @@ type AuthProviderProps = {
   children: JSX.Element;
 };
 
+interface IProtectedRoute extends AuthProviderProps {
+  requestedRole?: string | string[];
+}
+
 export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
   const authStore = useLocalObservable(createAuthStore);
 
@@ -23,13 +27,22 @@ export const AuthProvider = ({ children }: AuthProviderProps): JSX.Element => {
 export const useAuthStore = () => useContext(AuthContext);
 
 export const ProtectedRoute = ({
+  requestedRole,
   children,
-}: AuthProviderProps): JSX.Element => {
+}: IProtectedRoute): JSX.Element => {
   const { user } = useAuthStore();
   const location = useLocation();
 
   if (!user) {
     return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
+  }
+
+  const hasPermission = Array.isArray(requestedRole)
+    ? Object.values(requestedRole).some((v) => v === user.role)
+    : user.role === requestedRole;
+
+  if (!hasPermission) {
+    return <Navigate to="/" replace />;
   }
 
   return children;

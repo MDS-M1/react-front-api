@@ -19,27 +19,36 @@ import Login from "./pages/Account/Login/Login";
 const root = ReactDOM.createRoot(document.getElementById("root") as Element);
 
 const App: React.FC = (): JSX.Element => {
-  const mainRoutes = {
-    path: "/",
-    element: <DefaultLayout />,
-    children: [
-      { path: "*", element: <Navigate to="/404" replace /> },
-      { path: "/", element: <Home /> },
-      {
-        path: "/posts",
-        element: (
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        ),
-      },
-      { path: "/register", element: <Register /> },
-      { path: "/login", element: <Login /> },
-      { path: "404", element: <NotFound /> },
-    ],
-  };
+  const mainRoutes = [
+    {
+      path: "/",
+      element: <DefaultLayout />,
+      children: [
+        { path: "", element: <Home /> },
+        { path: "register", element: <Register /> },
+        { path: "login", element: <Login /> },
+      ],
+    },
+    {
+      path: "/posts",
+      element: (
+        <ProtectedRoute requestedRole="admin">
+          <DefaultLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        { path: "", element: <Posts /> },
+        {
+          path: ":postId",
+          element: <Post />,
+        },
+      ],
+    },
+    { path: "404", element: <NotFound /> },
+    { path: "*", element: <Navigate to="/404" replace /> },
+  ];
 
-  const routing = useRoutes([mainRoutes]);
+  const routing = useRoutes(mainRoutes);
 
   return <>{routing}</>;
 };
