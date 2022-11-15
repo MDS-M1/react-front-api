@@ -1,17 +1,22 @@
 import "./Header.scss";
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { observer } from "mobx-react";
 
 import { useAuthStore } from "../../../providers/Auth.provider";
 
 const Header: React.FC = observer(() => {
   const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
+
+  console.log(user);
 
   return (
     <header>
-      <h1>PostManager</h1>
+      <h1>
+        <Link to="/">PostManager</Link>
+      </h1>
       <div className="header--nav">
         <nav>
           <ul>
@@ -28,8 +33,19 @@ const Header: React.FC = observer(() => {
                 </li>
               </>
             )}
+            {user && user.role === "admin" && (
+              <li>
+                <Link to="/admin/post/create">Create a post</Link>
+              </li>
+            )}
             {user && (
-              <li className="logout" onClick={logout}>
+              <li
+                className="logout"
+                onClick={() => {
+                  logout();
+                  navigate("/");
+                }}
+              >
                 Logout
               </li>
             )}
