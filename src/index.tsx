@@ -4,8 +4,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Navigate, useRoutes } from "react-router-dom";
 
-import { AuthProvider, ProtectedRoute } from "./providers/Auth.provider";
-
 import Header from "./components/sections/Header/Header";
 import Footer from "./components/sections/Footer/Footer";
 
@@ -24,6 +22,7 @@ import EditUser from "./pages/Admin/Users/EditUser/EditUser";
 import UsersList from "./pages/Admin/Users/UsersList/UsersList";
 import PostsList from "./pages/Posts/PostsList/PostsList";
 import SinglePostPage from "./pages/Posts/ViewPost/SinglePostPage";
+import { ProtectedRoute } from "./providers/ProtectedRoute.provider";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as Element);
 
@@ -41,7 +40,7 @@ const App: React.FC = (): JSX.Element => {
     {
       path: "/posts",
       element: (
-        <ProtectedRoute requestedRole="admin">
+        <ProtectedRoute>
           <DefaultLayout />
         </ProtectedRoute>
       ),
@@ -99,12 +98,10 @@ const App: React.FC = (): JSX.Element => {
 
 root.render(
   <React.StrictMode>
-    <AuthProvider>
-      <Router>
-        <Header />
-        <App />
-        <Footer />
-      </Router>
-    </AuthProvider>
+    <Router>
+      <Header />
+      <App />
+      <Footer />
+    </Router>
   </React.StrictMode>
 );

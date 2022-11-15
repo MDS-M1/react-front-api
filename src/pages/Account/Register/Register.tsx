@@ -1,27 +1,27 @@
-import "./Register.css";
+import "./Register.scss";
 
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useAuthStore } from "../../../providers/Auth.provider";
+import { useStores } from "../../../hooks/useStores";
 import { withRouter } from "../../../utils/withRouter";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuthStore();
+  const { authStore } = useStores();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const registerPayload = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      passwordConfirmation: formData.get("repeat-password"),
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      passwordConfirmation: formData.get("repeat-password") as string,
     };
 
-    register(registerPayload).then(() => navigate("/"));
+    authStore.register(registerPayload).then(() => navigate("/"));
   };
 
   return (

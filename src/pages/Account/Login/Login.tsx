@@ -4,23 +4,23 @@ import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { withRouter } from "../../../utils/withRouter";
-import { useAuthStore } from "../../../providers/Auth.provider";
+import { useStores } from "../../../hooks/useStores";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuthStore();
+  const { authStore } = useStores();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
     const registerPayload = {
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
     };
 
-    login(registerPayload).then(() => {
+    authStore.login(registerPayload).then(() => {
       const searchParams = new URLSearchParams(location.search);
       const haveRedirect = searchParams.get("redirect");
       navigate(haveRedirect || "/");
