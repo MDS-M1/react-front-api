@@ -3,6 +3,8 @@ import jwt_decode from "jwt-decode";
 
 import { API_URL, HEADERS } from "../utils/global";
 
+import { observable, action, computed } from "mobx";
+
 export type RegisterInput = {
   email: string;
   name: string;
@@ -19,6 +21,7 @@ export type UserDocument = {
   _id: string;
   email: string;
   name: string;
+  role: string;
   accessToken: string;
   refreshToken: string;
   session: string;
@@ -34,82 +37,83 @@ type UserResult = {
   refreshToken: string;
 };
 
-type AuthStoreType = {
-  user: UserDocument | null;
-  login: (payload: LoginInput) => Promise<any>;
-  register: (payload: RegisterInput) => Promise<any>;
-  logout: () => void;
-  getAuthHeader: () => object;
-  getUserData: () => void;
-};
+export class AuthStore {
+  @observable
+  user: UserDocument | null = this.userData;
 
-export const createAuthStore = (): AuthStoreType => {
-  return {
-    user: null,
-    login(payload: LoginInput) {
-      return axios
-        .post(`${API_URL}/sessions`, payload, {
-          headers: HEADERS,
-        })
-        .then((res) => {
-          const { accessToken, refreshToken } = res.data;
+  @action
+  async login(payload: LoginInput) {
+    return axios
+      .post(`${API_URL}/sessions`, payload, {
+        headers: HEADERS,
+      })
+      .then((res) => {
+        const { accessToken, refreshToken } = res.data;
 
-          if (accessToken && refreshToken) {
-            localStorage.setItem("access_token", accessToken);
-            localStorage.setItem("refresh_token", refreshToken);
+        if (accessToken && refreshToken) {
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("refresh_token", refreshToken);
 
-            this.getUserData();
-          }
+          this.user = this.userData;
+        }
 
-          return res.data;
-        });
-    },
-    register(payload: RegisterInput) {
-      return axios
-        .post<UserResult>(`${API_URL}/users`, payload, {
-          headers: HEADERS,
-        })
-        .then((res) => {
-          const { accessToken, refreshToken } = res.data;
+        return res.data;
+      });
+  }
 
-          if (accessToken && refreshToken) {
-            localStorage.setItem("access_token", accessToken);
-            localStorage.setItem("refresh_token", refreshToken);
+  @action
+  async register(payload: RegisterInput) {
+    return axios
+      .post<UserResult>(`${API_URL}/users`, payload, {
+        headers: HEADERS,
+      })
+      .then((res) => {
+        const { accessToken, refreshToken } = res.data;
 
-            this.getUserData();
-          }
+        if (accessToken && refreshToken) {
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("refresh_token", refreshToken);
 
-          return res.data;
-        });
-    },
-    async logout() {
-      try {
-        axios.delete(`${API_URL}/sessions`, {
-          headers: { ...this.getAuthHeader(), ...HEADERS },
-        });
-      } catch (e) {
-        console.error(e);
-      }
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
+          this.user = this.userData;
+        }
 
-      this.user = null;
-    },
-    getUserData() {
-      const accessToken = localStorage.getItem("access_token")!;
-      if (accessToken) {
-        this.user = {
-          ...jwt_decode(accessToken)!,
-          accessToken: localStorage.getItem("access_token")!,
-          refreshToken: localStorage.getItem("refresh_token")!,
-        };
-      }
-    },
-    getAuthHeader() {
+        return res.data;
+      });
+  }
+
+  @action
+  async logout() {
+    try {
+      axios.delete(`${API_URL}/sessions`, {
+        headers: { ...this.authHeader, ...HEADERS },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+
+    this.user = null;
+  }
+
+  @computed
+  get userData(): UserDocument | null {
+    const accessToken = localStorage.getItem("access_token")!;
+    if (accessToken) {
       return {
-        Authorization: `Bearer ${this.user?.accessToken}`,
-        "x-refresh": `Bearer ${this.user?.refreshToken}`,
+        ...jwt_decode(accessToken)!,
+        accessToken: localStorage.getItem("access_token")!,
+        refreshToken: localStorage.getItem("refresh_token")!,
       };
-    },
-  };
-};
+    }
+    return null;
+  }
+
+  @computed
+  get authHeader() {
+    return {
+      Authorization: `Bearer ${this.user?.accessToken}`,
+      "x-refresh": `Bearer ${this.user?.refreshToken}`,
+    };
+  }
+}
